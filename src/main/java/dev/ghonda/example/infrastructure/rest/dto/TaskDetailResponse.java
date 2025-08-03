@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Builder
 public record TaskDetailResponse(
-    Long id,
     String externalId,
     String title,
     String description,
@@ -26,7 +25,6 @@ public record TaskDetailResponse(
 
     public static TaskDetailResponse of(final Task task) {
         return TaskDetailResponse.builder()
-            .id(task.getId())
             .externalId(task.getExternalId())
             .title(task.getTitle())
             .description(task.getDescription())

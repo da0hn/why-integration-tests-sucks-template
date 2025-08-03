@@ -9,4 +9,6 @@ public interface TaskService {
     @Transactional
     Task newTask(NewTaskCommand command);
 
+    Task findTaskById(String externalId);
+
 }

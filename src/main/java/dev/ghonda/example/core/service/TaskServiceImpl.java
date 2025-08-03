@@ -3,6 +3,7 @@ package dev.ghonda.example.core.service;
 import dev.ghonda.example.core.command.NewTaskCommand;
 import dev.ghonda.example.core.domain.Task;
 import dev.ghonda.example.core.exceptions.DomainValidationException;
+import dev.ghonda.example.core.exceptions.ResourceNotFoundException;
 import dev.ghonda.example.infrastructure.repository.TaskJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,12 @@ public class TaskServiceImpl implements TaskService {
         if (log.isInfoEnabled()) { log.info("Task created with id: {}", newTask.getId()); }
 
         return newTask;
+    }
+
+    @Override
+    public Task findTaskById(final String externalId) {
+        return this.taskJpaRepository.findByExternalId(externalId)
+            .orElseThrow(() -> new ResourceNotFoundException("Task with externalId " + externalId + " not found"));
     }
 
 }
