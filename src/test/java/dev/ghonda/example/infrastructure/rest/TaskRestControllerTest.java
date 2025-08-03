@@ -1,6 +1,7 @@
 package dev.ghonda.example.infrastructure.rest;
 
 import dev.ghonda.example.configuration.PostgreSQLContainerConfiguration;
+import dev.ghonda.example.infrastructure.rest.dto.ApiFailureResponse;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,53 @@ class TaskRestControllerTest {
             .body("description", Matchers.equalTo("Descrição da tarefa de teste"))
             .body("status", Matchers.equalTo("TODO"))
             .body("priority", Matchers.equalTo("HIGH"));
+    }
+
+    @Test
+    @DisplayName("Deve falhar ao criar uma tarefa com externalId duplicado")
+    void test2() {
+        final var externalId = "duplicated-external-id";
+
+        RestAssured.given()
+            .contentType("application/json")
+            .body(
+                """
+                {
+                  "externalId": "%s",
+                  "title": "Tarefa de Teste Duplicada",
+                  "description": "Descrição da tarefa de teste duplicada",
+                  "priority": "MEDIUM"
+                }
+                """.formatted(externalId)
+            )
+            .when()
+            .post("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
+
+        RestAssured.given()
+            .contentType("application/json")
+            .body(
+                """
+                {
+                  "externalId": "%s",
+                  "title": "Tarefa de Teste Duplicada",
+                  "description": "Descrição da tarefa de teste duplicada",
+                  "priority": "MEDIUM"
+                }
+                """.formatted(externalId)
+            )
+            .when()
+            .post("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body("message", Matchers.equalTo("Task with externalId %s already exists".formatted(externalId)))
+            .body("statusCode", Matchers.equalTo(HttpStatus.BAD_REQUEST.value()))
+            .body("timestamp", Matchers.notNullValue())
+            .body("path", Matchers.equalTo("/v1/tasks"))
+            .body("method", Matchers.equalTo("POST"))
+            .body("type", Matchers.equalTo(ApiFailureResponse.Type.BUSINESS.name()));
+
 
     }
 

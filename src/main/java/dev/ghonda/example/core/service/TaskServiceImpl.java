@@ -2,6 +2,7 @@ package dev.ghonda.example.core.service;
 
 import dev.ghonda.example.core.command.NewTaskCommand;
 import dev.ghonda.example.core.domain.Task;
+import dev.ghonda.example.core.exceptions.DomainValidationException;
 import dev.ghonda.example.infrastructure.repository.TaskJpaRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class TaskServiceImpl implements TaskService {
                 if (log.isWarnEnabled()) {
                     log.warn("Task with externalId {} already exists: {}", command.externalId(), task);
                 }
-                throw new IllegalArgumentException("Task with externalId " + command.externalId() + " already exists.");
+                throw new DomainValidationException("Task with externalId " + command.externalId() + " already exists");
             });
 
         final var newTask = Task.newTask(command);
