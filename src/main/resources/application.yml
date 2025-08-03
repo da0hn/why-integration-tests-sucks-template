@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: why-integration-tests-sucks-template
