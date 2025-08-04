@@ -10,7 +10,7 @@
     </parent>
     <groupId>dev.ghonda</groupId>
     <artifactId>why-integration-tests-sucks-template</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>why-integration-tests-sucks-template</name>
     <description>why-integration-tests-sucks-template</description>
     <url/>
