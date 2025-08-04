@@ -12,9 +12,20 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       pool-name: orm-connection-pool
-    username: ${DB_USER:user_task_api}
+    username: ${DB_USER:user_task_management_api}
     password: ${DB_PASSWORD:12345678}
-    url: jdbc:postgresql://${DB_HOST:task-database}:${DB_PORT:5432}/task_api_database
+    url: jdbc:postgresql://${DB_HOST:task-management-db}:${DB_PORT:5432}/task_management_api
+  flyway:
+    driver-class-name: org.postgresql.Driver
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    url: ${spring.datasource.url}
   threads:
     virtual:
       enabled: true
+  docker:
+    compose:
+      enabled: ${DOCKER_COMPOSE_ENABLED:false}
+      lifecycle-management: start_only
+      file: compose.yaml
+

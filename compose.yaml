@@ -1,0 +1,19 @@
+services:
+  task-management-api-db:
+    image: postgres:16.3
+    container_name: task-management-api-db
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_task_management_api"]
+    environment:
+      - POSTGRES_DB=task_management_api
+      - POSTGRES_USER=user_task_management_api
+      - POSTGRES_PASSWORD=12345678
+    ports:
+      - "5732:5432"
+    volumes:
+      - task-management-api-db-volume:/var/lib/postgresql/data
+volumes:
+  task-management-api-db-volume:
+    name: task-management-api-db-volume
+    driver: local
