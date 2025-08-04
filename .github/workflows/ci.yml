@@ -2,10 +2,12 @@
 name: ci
 
 on:
-  push:
-    branches: [master]
-    tags:    ['v*']
-  pull_request:
+  workflow_run:
+    workflows: ["bump-version"]
+    types:
+      - completed
+
+
 
 jobs:
   test:
