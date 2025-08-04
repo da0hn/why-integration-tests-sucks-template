@@ -1,7 +1,7 @@
 name: bump-version
 on:
   push:
-    branches: [master]
+    branches: [master, 'feature/**', 'bugfix/**']
 
 jobs:
   bump:
