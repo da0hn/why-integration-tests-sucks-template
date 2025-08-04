@@ -4,7 +4,11 @@ services:
     container_name: task-management-api-db
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user_task_management_api"]
+      test: ["CMD-SHELL", "pg_isready -U user_task_management_api -d task_management_api"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     environment:
       - POSTGRES_DB=task_management_api
       - POSTGRES_USER=user_task_management_api
