@@ -12,6 +12,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     hikari:
       pool-name: orm-connection-pool
+      connection-test-query: SELECT 1
+      maximum-pool-size: 10
+      minimum-idle: 2
+      max-lifetime: 600000  # 10 minutos (em ms)
+      connection-timeout: 30000  # 30 segundos
+      idle-timeout: 300000  # 5 minutos
+      validation-timeout: 5000  # 5 segundos
+      leak-detection-threshold: 60000  # 1 minuto
     username: ${DB_USER:user_task_management_api}
     password: ${DB_PASSWORD:12345678}
     url: jdbc:postgresql://${DB_HOST:task-management-db}:${DB_PORT:5432}/task_management_api
