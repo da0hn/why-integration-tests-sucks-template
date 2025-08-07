@@ -163,4 +163,66 @@ class TaskRestControllerTest {
             .body("type", Matchers.equalTo(ApiFailureResponse.Type.RESOURCE.name()));
     }
 
+    @Test
+    @CleanupAfterTest
+    @DisplayName("Deve buscar todas as tarefas")
+    void test5() {
+        final var externalId1 = "78a5431c-4e7e-4d5d-9917-6c9e01ba8625";
+        final var externalId2 = "b2c3d4e5-f6g7-h8i9-j0k1-l2m3n4o5p6q7";
+
+        RestAssured.given()
+            .contentType("application/json")
+            .body(
+                """
+                {
+                  "externalId": "%s",
+                  "title": "Tarefa 1",
+                  "description": "Descrição da tarefa 1",
+                  "priority": "LOW"
+                }
+                """.formatted(externalId1)
+            )
+            .when()
+            .post("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
+
+        RestAssured.given()
+            .contentType("application/json")
+            .body(
+                """
+                {
+                  "externalId": "%s",
+                  "title": "Tarefa 2",
+                  "description": "Descrição da tarefa 2",
+                  "priority": "MEDIUM"
+                }
+                """.formatted(externalId2)
+            )
+            .when()
+            .post("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.CREATED.value());
+
+        RestAssured.given()
+            .contentType("application/json")
+            .when()
+            .get("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("success", Matchers.equalTo(true))
+            .body("data", Matchers.hasSize(2))
+            .body("data[0].externalId", Matchers.equalTo(externalId1))
+            .body("data[0].title", Matchers.equalTo("Tarefa 1"))
+            .body("data[0].description", Matchers.equalTo("Descrição da tarefa 1"))
+            .body("data[0].priority", Matchers.equalTo("LOW"))
+            .body("data[0].status", Matchers.equalTo("TODO"))
+            .body("data[0].createdAt", Matchers.notNullValue())
+            .body("data[1].externalId", Matchers.equalTo(externalId2))
+            .body("data[1].title", Matchers.equalTo("Tarefa 2"))
+            .body("data[1].description", Matchers.equalTo("Descrição da tarefa 2"))
+            .body("data[1].priority", Matchers.equalTo("MEDIUM"))
+            .body("data[1].status", Matchers.equalTo("TODO"))
+            .body("data[1].createdAt", Matchers.notNullValue());
+    }
 }

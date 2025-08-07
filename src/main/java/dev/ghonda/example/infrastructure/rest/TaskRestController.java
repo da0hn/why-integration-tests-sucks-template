@@ -2,6 +2,8 @@ package dev.ghonda.example.infrastructure.rest;
 
 import dev.ghonda.example.core.command.NewTaskCommand;
 import dev.ghonda.example.core.service.TaskService;
+import dev.ghonda.example.infrastructure.rest.dto.ApiCollectionPageResponse;
+import dev.ghonda.example.infrastructure.rest.dto.ApiCollectionResponse;
 import dev.ghonda.example.infrastructure.rest.dto.TaskDetailResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,5 +34,19 @@ public class TaskRestController {
         return ResponseEntity.ok(TaskDetailResponse.of(task));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiCollectionResponse<TaskDetailResponse>> getAllTasks() {
+        final var tasks = this.taskService.findAllTasks();
+
+        if (tasks.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        final var response = tasks.stream()
+            .map(TaskDetailResponse::of)
+            .toList();
+
+        return ResponseEntity.ok(ApiCollectionResponse.of(response));
+    }
 
 }
