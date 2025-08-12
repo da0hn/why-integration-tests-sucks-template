@@ -37,10 +37,6 @@ public class TaskRestController {
     public ResponseEntity<ApiCollectionResponse<TaskDetailResponse>> getAllTasks() {
         final var tasks = this.taskService.findAllTasks();
 
-        if (tasks.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
         final var response = tasks.stream()
             .map(TaskDetailResponse::of)
             .toList();

@@ -225,4 +225,19 @@ class TaskRestControllerTest {
             .body("data[1].status", Matchers.equalTo("TODO"))
             .body("data[1].createdAt", Matchers.notNullValue());
     }
+
+    @Test
+    @CleanupAfterTest
+    @DisplayName("Deve retornar 200 OK quando não houver tarefas")
+    void test6() {
+        RestAssured.given()
+            .contentType("application/json")
+            .when()
+            .get("/v1/tasks")
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .body("success", Matchers.equalTo(true))
+            .body("data", Matchers.emptyIterable());
+
+    }
 }
