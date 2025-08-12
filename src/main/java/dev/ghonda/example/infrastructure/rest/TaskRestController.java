@@ -2,10 +2,11 @@ package dev.ghonda.example.infrastructure.rest;
 
 import dev.ghonda.example.core.command.NewTaskCommand;
 import dev.ghonda.example.core.service.TaskService;
+import dev.ghonda.example.infrastructure.rest.dto.ApiCollectionResponse;
 import dev.ghonda.example.infrastructure.rest.dto.TaskDetailResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,5 +33,15 @@ public class TaskRestController {
         return ResponseEntity.ok(TaskDetailResponse.of(task));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiCollectionResponse<TaskDetailResponse>> getAllTasks() {
+        final var tasks = this.taskService.findAllTasks();
+
+        final var response = tasks.stream()
+            .map(TaskDetailResponse::of)
+            .toList();
+
+        return ResponseEntity.ok(ApiCollectionResponse.of(response));
+    }
 
 }

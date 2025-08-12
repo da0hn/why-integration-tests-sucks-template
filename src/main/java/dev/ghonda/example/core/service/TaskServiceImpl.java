@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -44,6 +46,11 @@ public class TaskServiceImpl implements TaskService {
     public Task findTaskById(final String externalId) {
         return this.taskJpaRepository.findByExternalId(externalId)
             .orElseThrow(() -> new ResourceNotFoundException("Task with externalId " + externalId + " not found"));
+    }
+
+    @Override
+    public List<Task> findAllTasks() {
+        return this.taskJpaRepository.findAll();
     }
 
 }
